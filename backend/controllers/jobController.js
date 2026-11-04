@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Job = require("../models/Job");
 const Application = require("../models/Application");
-const SavedJob = require("../models/SavedJob");
+const SavedJob = require("../models/savedJob");
 
 // @desc create a new job (employer only)
 const createJob = async (req, res) => {
