@@ -13,32 +13,29 @@ const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
-// middleware to handle cors
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.CLIENT_URL || "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// connect database
 connectDB();
 
-//Middleware
 app.use(express.json());
-
-// routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/jobs", jobsRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/save-jobs", savedJobsRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// serve uploads folder
-app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
+// Vercel imports the Express app; listen only when running locally.
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
+}
 
-// start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
+module.exports = app;
